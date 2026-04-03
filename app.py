@@ -21,7 +21,30 @@ ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+def init_db() -> None:
+    db = get_db()
+    db.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at TEXT NOT NULL,
+            candidate_name TEXT NOT NULL,
+            student_id TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            department TEXT NOT NULL,
+            answers_json TEXT NOT NULL,
+            result_json TEXT NOT NULL,
+            reviewer_note TEXT DEFAULT '',
+            review_status TEXT DEFAULT 'Chưa xem',
+            final_interview_decision TEXT DEFAULT ''
+        )
+        '''
+    )
+    db.commit()
 
+with app.app_context():
+    init_db()
 
 def get_db() -> sqlite3.Connection:
     if 'db' not in g:
