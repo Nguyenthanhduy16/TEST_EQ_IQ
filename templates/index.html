@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Trang chủ{% endblock %}
+{% block content %}
+<div class="card hero">
+  <h1>Hệ thống mini-test nội bộ</h1>
+  <p>Bản web nội bộ để ứng viên làm 50 câu trắc nghiệm, hệ thống chấm điểm ẩn ngay khi nộp và ban tuyển xem dashboard trên cùng một app.</p>
+  <div class="hero-actions">
+    <a class="btn primary" href="{{ url_for('apply') }}">Mở bài test</a>
+    <a class="btn" href="{{ url_for('admin_login') }}">Vào dashboard</a>
+  </div>
+</div>
+
+<div class="grid two-col">
+  <div class="card">
+    <h2>Cách dùng</h2>
+    <ol>
+      <li>Ứng viên mở trang <strong>Làm bài</strong> và nộp form.</li>
+      <li>Hệ thống tự chấm theo trục ẩn, sinh cờ rủi ro và gợi ý phỏng vấn.</li>
+      <li>Ban tuyển vào khu quản trị để lọc, xem chi tiết, thêm ghi chú.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>Trạng thái</h2>
+    <p><strong>Tổng bài đã nộp:</strong> {{ total }}</p>
+    <p>App này chạy cục bộ với Flask + SQLite, phù hợp dùng nội bộ và không cần Google Cloud.</p>
+  </div>
+</div>
+{% endblock %}

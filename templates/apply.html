@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Làm bài test{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Bài test định hướng ứng viên</h1>
+  <p>Bài test này dùng để ghi nhận một vài xu hướng về cách hòa nhập, cách làm việc và định hướng phát triển. Không có đáp án đúng sai tuyệt đối. Hãy chọn phương án gần với bạn hơn.</p>
+</div>
+
+<form method="post" class="form-stack large-gap">
+  <div class="card">
+    <h2>Thông tin cơ bản</h2>
+    <div class="grid two-col">
+      <label>Họ và tên
+        <input type="text" name="candidate_name" value="{{ values.get('candidate_name', '') }}" required>
+      </label>
+      <label>MSSV
+        <input type="text" name="student_id" value="{{ values.get('student_id', '') }}" required>
+      </label>
+      <label>Email
+        <input type="email" name="email" value="{{ values.get('email', '') }}" required>
+      </label>
+      <label>Số điện thoại
+        <input type="text" name="phone" value="{{ values.get('phone', '') }}" required>
+      </label>
+      <label class="full">Viện/Ngành hoặc Lớp
+        <input type="text" name="department" value="{{ values.get('department', '') }}" required>
+      </label>
+    </div>
+  </div>
+
+  {% for q in questions %}
+  <div class="card question-card">
+    <h3>{{ q.id }}. {{ q.text }}</h3>
+    <div class="options">
+      {% for key, label in q.options.items() %}
+        <label class="option">
+          <input type="radio" name="{{ q.id }}" value="{{ key }}" {% if values.get(q.id) == key %}checked{% endif %} required>
+          <span><strong>[{{ key }}]</strong> {{ label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="card sticky-submit">
+    <button class="btn primary large" type="submit">Nộp bài</button>
+  </div>
+</form>
+{% endblock %}

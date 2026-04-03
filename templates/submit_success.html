@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Đã nộp{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Đã nộp bài thành công</h1>
+  <p>Cảm ơn bạn đã hoàn thành bài test. Kết quả sẽ được ban tuyển tổng hợp cùng các vòng khác.</p>
+  <a class="btn primary" href="{{ url_for('index') }}">Về trang chủ</a>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Chi tiết ứng viên{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="row-between wrap">
+    <div>
+      <h1>{{ row['candidate_name'] }}</h1>
+      <p class="muted">{{ row['student_id'] }} · {{ row['email'] }} · {{ row['phone'] }} · {{ row['department'] }}</p>
+      <p class="muted">Nộp lúc: {{ row['created_at'] }}</p>
+    </div>
+    <div class="score-box">
+      <div class="score-number">{{ result['mini_test_score'] }}</div>
+      <div>{{ result['fit_level'] }}</div>
+      <div class="muted">{{ result['confidence_level'] }} · {{ result['interview_priority'] }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid two-col">
+  <div class="card">
+    <h2>Tóm tắt tự động</h2>
+    <p>{{ result['quick_summary'] }}</p>
+    <h3>Điểm mạnh</h3>
+    <ul>
+      {% for item in result['top_strengths'] %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+    <h3>Rủi ro cần lưu ý</h3>
+    <ul>
+      {% for item in result['top_risks'] %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+    <h3>Trọng tâm phỏng vấn</h3>
+    <p>{{ result['interview_focus'] }}</p>
+    <h3>Câu hỏi gợi ý</h3>
+    <ol>
+      {% for item in result['suggested_questions'] %}<li>{{ item }}</li>{% endfor %}
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Điểm theo trục</h2>
+    <div class="score-list">
+      {% for key, label in dimensions.items() %}
+      <div class="score-item">
+        <span>{{ label }}</span>
+        <strong>{{ result['scores'][key] if key in result['scores'] else result[key] }}</strong>
+      </div>
+      {% endfor %}
+      <div class="score-item"><span>C1 - Nhất quán</span><strong>{{ result['C1'] }}</strong></div>
+      <div class="score-item"><span>C2 - Tự nhiên</span><strong>{{ result['C2'] }}</strong></div>
+      <div class="score-item"><span>C3 - Cực đoan</span><strong>{{ result['C3'] }}</strong></div>
+      <div class="score-item"><span>C4 - Độ chắc</span><strong>{{ result['C4'] }}</strong></div>
+    </div>
+    <h3>Flags</h3>
+    <ul>
+      {% for key, value in result['flags'].items() %}
+        <li>{{ key }}: <strong>{{ 'Có' if value else 'Không' }}</strong></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Ghi chú phỏng vấn</h2>
+  <form method="post" class="form-stack">
+    <div class="grid two-col">
+      <label>Trạng thái review
+        <select name="review_status">
+          {% for item in ['Chưa xem', 'Đã xem', 'Đã phỏng vấn', 'Hoàn tất'] %}
+          <option value="{{ item }}" {% if row['review_status'] == item %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Kết luận sau phỏng vấn
+        <select name="final_interview_decision">
+          {% for item in ['', 'Đề xuất chọn', 'Cần cân nhắc', 'Không đề xuất'] %}
+          <option value="{{ item }}" {% if row['final_interview_decision'] == item %}selected{% endif %}>{{ item or 'Chưa có' }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <label>Ghi chú của người phỏng vấn
+      <textarea name="reviewer_note" rows="6">{{ row['reviewer_note'] }}</textarea>
+    </label>
+    <button class="btn primary" type="submit">Lưu ghi chú</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Câu trả lời đã chọn</h2>
+  <div class="qa-list">
+    {% for q in questions %}
+      <div class="qa-item">
+        <strong>{{ q.id }}. {{ q.text }}</strong>
+        <p>[{{ answers[q.id] }}] {{ q.options[answers[q.id]] }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

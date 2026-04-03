@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="row-between">
+    <div>
+      <h1>Dashboard ứng viên</h1>
+      <p>Danh sách kết quả mini-test, lọc nhanh và mở chi tiết để đọc hồ sơ.</p>
+    </div>
+    <a class="btn" href="{{ url_for('export_csv') }}">Xuất CSV</a>
+  </div>
+</div>
+
+<div class="card">
+  <form method="get" class="filters">
+    <input type="text" name="q" value="{{ q }}" placeholder="Tìm theo tên, MSSV, email">
+    <select name="fit">
+      <option value="">Tất cả mức phù hợp</option>
+      {% for item in ['Rất phù hợp', 'Phù hợp', 'Tạm phù hợp, cần kiểm chứng', 'Rủi ro cao, cần phỏng vấn sâu', 'Chưa phù hợp hiện tại'] %}
+        <option value="{{ item }}" {% if fit == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <select name="priority">
+      <option value="">Tất cả ưu tiên</option>
+      {% for item in ['Ưu tiên tuyển', 'Ưu tiên kiểm chứng', 'Phỏng vấn thường', 'Không ưu tiên'] %}
+        <option value="{{ item }}" {% if priority == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn primary" type="submit">Lọc</button>
+  </form>
+</div>
+
+<div class="table-wrap card">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Ứng viên</th>
+        <th>Điểm</th>
+        <th>Mức phù hợp</th>
+        <th>Ưu tiên</th>
+        <th>Hồ sơ</th>
+        <th>Tự động nhận xét</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in candidates %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>
+          <strong>{{ c.candidate_name }}</strong><br>
+          <span class="muted">{{ c.student_id }} · {{ c.department }}</span>
+        </td>
+        <td>{{ c.mini_test_score }}</td>
+        <td><span class="badge">{{ c.fit_level }}</span></td>
+        <td>{{ c.interview_priority }}</td>
+        <td>{{ c.candidate_profile }}</td>
+        <td>{{ c.quick_summary }}</td>
+        <td><a class="btn small" href="{{ url_for('admin_candidate', candidate_id=c.id) }}">Xem</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8">Chưa có dữ liệu phù hợp với bộ lọc.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
