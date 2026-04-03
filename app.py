@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import json
@@ -63,7 +64,6 @@ def init_db() -> None:
 
 with app.app_context():
     init_db()
-
 
 def serialize_result(answers: Dict[str, str]) -> Dict[str, Any]:
     score_result = calculate_scores(answers)
